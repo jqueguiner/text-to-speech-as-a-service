@@ -2,6 +2,8 @@ FROM pytorch/pytorch:latest
 
 RUN apt-get update && apt-get install -y --no-install-recommends
 
+RUN apt-get install libsndfile1 --allow-unauthenticated -y
+
 ADD src /src
 
 WORKDIR /src

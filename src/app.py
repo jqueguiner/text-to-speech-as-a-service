@@ -13,8 +13,8 @@ from flask import request
 from flask import send_file
 import traceback
 
-import torch
 
+from notebook_utils.synthesize import *
 
 
 try:  # Python 3.5+
@@ -35,12 +35,11 @@ def process():
 
     try:
         text = request.json["text"]
-        top_k = request.json["top_k"]
+        
+        wav = synthesize(text, tts_model, voc_model, alpha=1.0)
+        ipd.Audio(wav, rate=hp.sample_rate)
 
-        if "<mask>" not in text:
-            text = text + ' <mask>' 
-
-        callback = json.dumps(camembert.fill_mask(text, topk=int(top_k)))
+        callback = send_file(zip_output_path, mimetype='audio/wav')
 
         return callback, 200
 
@@ -52,10 +51,12 @@ def process():
 if __name__ == '__main__':
     global camembert
 
-    camembert = torch.hub.load('pytorch/fairseq', 'camembert.v0')
+    init_hparams('notebook_utils/pretrained_hparams.py')
+    tts_model = get_forward_model('pretrained/forward_100K.pyt')
+    voc_model = get_wavernn_model('pretrained/wave_800K.pyt')
 
     port = 5000
     host = '0.0.0.0'
 
-    app.run(host=host, port=port, threaded=False)
+    app.run(host=host, port=port, threaded=True)
 
