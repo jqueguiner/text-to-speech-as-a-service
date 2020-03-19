@@ -37,9 +37,9 @@ def process():
         text = request.json["text"]
         
         wav = synthesize(text, tts_model, voc_model, alpha=1.0)
-        ipd.Audio(wav, rate=hp.sample_rate)
+        
 
-        callback = send_file(zip_output_path, mimetype='audio/wav')
+        callback = send_file(wav, mimetype='audio/wav')
 
         return callback, 200
 
