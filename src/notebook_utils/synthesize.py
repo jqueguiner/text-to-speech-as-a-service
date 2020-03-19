@@ -51,7 +51,7 @@ def get_wavernn_model(model_path):
     return model
 
 
-def synthesize(input_text, tts_model, voc_model, alpha=1.0):
+def synthesize(input_text, tts_model, voc_model, alpha=1.0, output_file='/tmp/sample.wav'):
     x = text_to_sequence(input_text.strip(), ['english_cleaners'])
     m = tts_model.generate(x, alpha=alpha)
     # Fix mel spectrogram scaling to be from 0 to 1
@@ -61,7 +61,7 @@ def synthesize(input_text, tts_model, voc_model, alpha=1.0):
         wav = reconstruct_waveform(m, n_iter=32)
     else:
         m = torch.tensor(m).unsqueeze(0)
-        wav = voc_model.generate(m, '/tmp/sample.wav', True, hp.voc_target, hp.voc_overlap, hp.mu_law)
+        wav = voc_model.generate(m, output_file, True, hp.voc_target, hp.voc_overlap, hp.mu_law)
         print()
     return wav
 
