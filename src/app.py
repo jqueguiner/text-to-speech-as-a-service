@@ -53,7 +53,7 @@ def create_directory(path):
 
 @app.route("/process", methods=["POST", "GET"])
 def process():
-     output_path = generate_random_filename(output_directory, "wav")
+    output_path = generate_random_filename(output_directory, "wav")
 
     try:
         text = request.json["text"]
