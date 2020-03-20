@@ -67,9 +67,12 @@ def process():
 
     except:
         traceback.print_exc()
-        clean_me(generate_random_filename)
         return {'message': 'input error'}, 400
 
+    finally:
+        clean_me(
+            output_path
+            )
 
 if __name__ == '__main__':
     global output_directory
