@@ -58,10 +58,10 @@ def process():
     try:
         text = request.json["text"]
         
-        wav = synthesize(text, tts_model, voc_model, alpha=1.0, generate_random_filename)
+        synthesize(text, tts_model, voc_model, alpha=1.0, output_file=output_path)
         
 
-        callback = send_file(generate_random_filename, mimetype='audio/wav')
+        callback = send_file(output_file, mimetype='audio/wav')
 
         return callback, 200
 
