@@ -54,7 +54,6 @@ def process():
         
         synthesize(text, tts_model, voc_model, alpha=1.0, output_file=output_path)
         
-
         callback = send_file(output_path, mimetype='audio/wav')
 
         return callback, 200
