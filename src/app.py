@@ -7,16 +7,13 @@ import random
 import string
 import json
 
-
 from flask import jsonify
 from flask import Flask
 from flask import request
 from flask import send_file
 import traceback
 
-
 from uuid import uuid4
-
 
 from notebook_utils.synthesize import *
 
@@ -33,7 +30,6 @@ except ImportError:
 app = Flask(__name__)
 
 
-
 def generate_random_filename(upload_directory, extension):
     filename = str(uuid4())
     filename = os.path.join(upload_directory, filename + "." + extension)
@@ -45,10 +41,8 @@ def clean_me(filename):
         os.remove(filename)
 
 
-
 def create_directory(path):
     os.system("mkdir -p %s" % os.path.dirname(path))
-
 
 
 @app.route("/process", methods=["POST", "GET"])
@@ -61,7 +55,7 @@ def process():
         synthesize(text, tts_model, voc_model, alpha=1.0, output_file=output_path)
         
 
-        callback = send_file(output_file, mimetype='audio/wav')
+        callback = send_file(output_path, mimetype='audio/wav')
 
         return callback, 200
 
@@ -73,6 +67,7 @@ def process():
         clean_me(
             output_path
             )
+
 
 if __name__ == '__main__':
     global output_directory
